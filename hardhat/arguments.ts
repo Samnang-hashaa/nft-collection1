@@ -1,0 +1,8 @@
+module.exports = [
+    "ipfs://QmUZrvqRNqHdDEM7eLPhK1DS9q42zSR63gqnjpzC5ASHuz/",
+    "250",
+    "0x2381776d931953e142e51620944bDA170eD9C846",
+    "0x1e3c83FA89C426221103F3f38B779c941B46c860"
+    
+
+]
