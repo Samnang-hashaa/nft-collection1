@@ -35,7 +35,7 @@ export default function Home() {
     const tx = await nftContract.presaleMint({
      // value signifies the cost of one crypto dev which is "0.01" eth.
      // We are parsing `0.01` string to ether using the utils library from ethers.js
-      value: utils.parseEther("0.02"),
+      value: utils.parseEther("0.01"),
     })
     setLoading(true);
     // wait for the transaction to get mined
@@ -59,7 +59,7 @@ export default function Home() {
       const tx = await nftContract.mint({
         // value signifies the cost of one crypto dev which is "0.01" eth.
         // We are parsing `0.01` string to ether using the utils library from ethers.js
-        value: utils.parseEther("0.01"),
+        value: utils.parseEther("0.02"),
       });
       setLoading(true);
       // wait for the transaction to get mined
@@ -313,8 +313,7 @@ export default function Home() {
       return (
         <div>
           <div className={styles.description}>
-            Presale has started!!! If your address is whitelisted, Mint a Crypto
-            Dev 🥳
+            Presale has started!!! If your address is whitelisted, Mint a IG Collection 🥳
           </div>
           <button className={styles.button} onClick={presaleMint}>
             Presale Mint 🚀

@@ -64,7 +64,7 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
 
     function startPresale() public onlyOwner {
         presaleStarted = true;
-        presaleEnded = block.timestamp + 10 minutes;
+        presaleEnded = block.timestamp + 7 minutes;
     }
 
     function presaleMint() public payable onlyWhenNotPaused {
