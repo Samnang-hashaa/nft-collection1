@@ -14,6 +14,7 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
 
     address public artist;
     uint96 public royalityFee;
+    uint256 private id;
 
     event Sale(address from, address to, uint256 value);
 
@@ -39,6 +40,8 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
     // timestamp for when presale would end
     uint256 public presaleEnded;
 
+    mapping(address => bool) public isMinted;
+
     modifier onlyWhenNotPaused {
         require(!_paused, "Contract currently paused");
         _;
@@ -47,6 +50,7 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
     //     _baseTokenURI = baseURI;
     //     whitelist = IWhitelist(whitelistContract);
     // }
+
 
      constructor(
         string memory _initBaseURI,
@@ -70,23 +74,27 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
     function presaleMint() public payable onlyWhenNotPaused {
         require(presaleStarted && block.timestamp < presaleEnded, "Presale is not running");
         require(whitelist.whitelistedAddresses(msg.sender), "You are not whitelisted");
+        require(!isMinted[msg.sender], "You are already Minted");
         require(tokenIds < maxTokenIds, "Exceeded maximum Crypto Devs supply");
+
         require(msg.value >= _presaleprice, "Ether sent is not correct");
         tokenIds += 1;
 
         if (msg.sender != owner()) {
             require(msg.value >= _presaleprice);
+            isMinted[msg.sender] = true;
+            
 
-            // Pay royality to artist, and remaining to deployer of contract
+        //     // Pay royality to artist, and remaining to deployer of contract
 
-            uint256 royality = (msg.value * royalityFee) / 100;
-            _payRoyality(royality);
+        //     uint256 royality = (msg.value * royalityFee) / 100;
+        //     _payRoyality(royality);
 
-            (bool success2, ) = payable(owner()).call{
-                value: (msg.
-                value - royality)
-            }("");
-            require(success2);
+        //     (bool success2, ) = payable(owner()).call{
+        //         value: (msg.
+        //         value - royality)
+        //     }("");
+        //     require(success2);
         }
 
         _safeMint(msg.sender, tokenIds);
@@ -99,22 +107,24 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
     function mint() public payable onlyWhenNotPaused {
         require(presaleStarted && block.timestamp >=  presaleEnded, "Presale has not ended yet");
         require(tokenIds < maxTokenIds, "Exceed maximum Crypto Devs supply");
+        require(!isMinted[msg.sender], "You are already Minted");
         require(msg.value >= _price, "Ether sent is not correct");
         tokenIds += 1;
 
 
         if (msg.sender != owner()) {
             require(msg.value >= _price);
+            isMinted[msg.sender] = true;
 
             // Pay royality to artist, and remaining to deployer of contract
 
-            uint256 royality = (msg.value * royalityFee) / 100;
-            _payRoyality(royality);
+            // uint256 royality = (msg.value * royalityFee) / 100;
+            // _payRoyality(royality);
 
-            (bool success2, ) = payable(owner()).call{
-                value: (msg.value - royality)
-            }("");
-            require(success2);
+            // (bool success2, ) = payable(owner()).call{
+            //     value: (msg.value - royality)
+            // }("");
+            // require(success2);
         }
         _safeMint(msg.sender, tokenIds);
         _setTokenRoyalty(tokenIds, msg.sender, royalityFee);
@@ -159,7 +169,7 @@ contract IG is ERC721Enumerable, ERC2981, Ownable {
     }
 
     function contractURI() public pure returns (string memory) {
-        return "ipfs://QmUZrvqRNqHdDEM7eLPhK1DS9q42zSR63gqnjpzC5ASHuz/";
+        return "ipfs://QmcHtq18JdQCnnaL3Y84kWvU4PytzpHJ9DE86UzxwdG7Br/";
     }
 
     // Internal functions
